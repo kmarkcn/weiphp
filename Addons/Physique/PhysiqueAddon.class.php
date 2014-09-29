@@ -36,9 +36,9 @@ use Common\Controller\Addon;
 		return true;
 	}
 
-        //实现的weixin钩子方法
-        public function weixin($param){
+    //实现的weixin钩子方法
+    public function weixin($param){
 
-        }
+    }
 
     }
