@@ -53,17 +53,23 @@ class PhysiqueController extends AddonsController{
     	$data['score'] = $_GET['gg_score'];
     	$data['test_time'] = date('Y-m-d h:i:s');
     	//print_r($data);
-    	
-    	        if(M('gguser')->add($data)){
-    	            $_SESSION['is_gg_user']=1;
-    	            $this->assign('gg_user',$data['name']);
-    	            $this->assign('gg_phone',$data['tel']);
-    	            $this->assign('gg_score',$data['score']);
-    	            $this->display();
-    	        }
-    	        
-    	  
+    	//在这里需要判断一下用户是否存在
+    	if($this->dataIsExist($data)){
+    		if(M('gguser')->add($data)){
+    			$_SESSION['is_gg_user']=1;
+    			$this->assign('gg_user',$data['name']);
+    			$this->assign('gg_phone',$data['tel']);
+    			$this->assign('gg_score',$data['score']);
+    			$this->display();
+    		}
+    	}else{
+    		$this->assign('gg_user',$data['name']);
+    		$this->assign('gg_phone',$data['tel']);
+    		$this->assign('gg_score',$data['score']);
+    		$this->display();
     	}
+	    
+	}
     	
    
 
@@ -137,6 +143,27 @@ class PhysiqueController extends AddonsController{
         parent::common_add($this->model);
     }
     
+    
+    
+    
+    
+ /*
+  * 2014-10-09 by terry @kmark
+  * 实现数据库查询,判断该数据是否已经存在
+  */
+    
+    function dataIsExist($arr=null){
+    	$where = array(
+    		'name' => $arr['name'],
+    		'tel'  => $arr['tel']
+    	);
+    	if((M('gguser')->where($where)->select())){
+    		return 0;	
+    	}else{
+    		return 1;
+    	}
+    	
+    }
    
 
 }
